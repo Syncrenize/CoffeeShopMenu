@@ -1,87 +1,80 @@
-import React from "react";
-import {
-  Alert,
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { router } from "expo-router";
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-type MenuItem = {
+type CoffeeItem = {
   id: string;
   category: string;
   name: string;
+  price: string;
+  description: string;
 };
 
-export default function Index() {
-  const menuItems: MenuItem[] = [
+export default function HomeScreen() {
+  const coffeeData: CoffeeItem[] = [
     {
       id: "1",
       category: "Hot Drinks",
       name: "Americano",
+      price: "₱120",
+      description: "Bold and strong black coffee brewed with espresso shots.",
     },
     {
       id: "2",
       category: "Hot Drinks",
-      name: "Latte",
+      name: "Cappuccino",
+      price: "₱150",
+      description: "Espresso with steamed milk and foam.",
     },
     {
       id: "3",
-      category: "Desserts",
-      name: "Cheesecake",
+      category: "Hot Drinks",
+      name: "Latte",
+      price: "₱160",
+      description: "Creamy espresso drink with milk.",
     },
     {
       id: "4",
-      category: "Desserts",
-      name: "Brownie",
+      category: "Cold Drinks",
+      name: "Iced Coffee",
+      price: "₱130",
+      description: "Refreshing chilled coffee.",
     },
-
-    // New Menu Items
     {
       id: "5",
       category: "Cold Drinks",
-      name: "Iced Coffee",
-    },
-    {
-      id: "6",
-      category: "Cold Drinks",
-      name: "Caramel Frappuccino",
-    },
-    {
-      id: "7",
-      category: "Pastries",
-      name: "Croissant",
+      name: "Frappuccino",
+      price: "₱180",
+      description: "Blended iced coffee with whipped cream.",
     },
   ];
 
-  const showItem = (itemName: string) => {
-    Alert.alert("Menu Item", itemName);
-  };
-
-  const renderItem = ({ item }: { item: MenuItem }) => (
-    <View style={styles.card}>
-      <Text style={styles.category}>{item.category}</Text>
-
-      <Text style={styles.itemName}>{item.name}</Text>
-
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => showItem(item.name)}
-      >
-        <Text style={styles.buttonText}>View Item</Text>
-      </TouchableOpacity>
-    </View>
-  );
-
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Fame's Coffee House Menu</Text>
+      <Text style={styles.title}>☕ Coffee Shop Menu</Text>
 
       <FlatList
-        data={menuItems}
+        data={coffeeData}
         keyExtractor={(item) => item.id}
-        renderItem={renderItem}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            style={styles.card}
+            onPress={() =>
+              router.push({
+                pathname: "/detail",
+                params: {
+                  category: item.category,
+                  name: item.name,
+                  price: item.price,
+                  description: item.description,
+                },
+              })
+            }
+          >
+            <Text style={styles.category}>{item.category}</Text>
+            <Text style={styles.name}>{item.name}</Text>
+            <Text style={styles.price}>{item.price}</Text>
+          </TouchableOpacity>
+        )}
       />
     </View>
   );
@@ -90,48 +83,37 @@ export default function Index() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#222",
-    paddingTop: 60,
-    paddingHorizontal: 20,
+    padding: 15,
+    backgroundColor: "#F7F2EE",
   },
 
   title: {
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: "bold",
-    color: "white",
-    marginBottom: 20,
+    marginBottom: 15,
   },
 
   card: {
-    borderBottomWidth: 1,
-    borderBottomColor: "#888",
-    paddingVertical: 15,
+    backgroundColor: "#fff",
+    padding: 15,
+    marginBottom: 10,
+    borderLeftWidth: 4,
+    borderLeftColor: "#8B4513",
+    borderRadius: 8,
   },
 
   category: {
     color: "#999",
-    fontSize: 14,
+    fontSize: 12,
   },
 
-  itemName: {
-    color: "white",
-    fontSize: 22,
+  name: {
+    fontSize: 18,
     fontWeight: "bold",
-    marginVertical: 5,
   },
 
-  button: {
-    borderWidth: 1,
-    borderColor: "#fff",
-    paddingVertical: 8,
-    paddingHorizontal: 15,
-    borderRadius: 8,
-    alignSelf: "flex-start",
-    marginTop: 5,
-  },
-
-  buttonText: {
-    color: "white",
+  price: {
+    color: "#D2691E",
     fontWeight: "bold",
   },
 });
