@@ -1,11 +1,10 @@
-import React from "react";
 import {
-  View,
-  Text,
+  Alert,
   FlatList,
   StyleSheet,
+  Text,
   TouchableOpacity,
-  Alert,
+  View,
 } from "react-native";
 
 export default function App() {
