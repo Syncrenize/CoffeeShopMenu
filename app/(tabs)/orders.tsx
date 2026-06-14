@@ -1,5 +1,7 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import {
+  Alert,
   StyleSheet,
   Text,
   TextInput,
@@ -7,51 +9,66 @@ import {
   View,
 } from "react-native";
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
-export default function CartScreen() {
+export default function OrdersScreen() {
   const [note, setNote] = useState("");
+  const [savedNote, setSavedNote] = useState("");
 
   useEffect(() => {
     loadNote();
   }, []);
 
   const saveNote = async () => {
-    await AsyncStorage.setItem("cartNote", note);
+    try {
+      await AsyncStorage.setItem("cartNote", note);
+      setSavedNote(note);
+
+      Alert.alert("Success", "Note saved successfully!");
+    } catch (error) {
+      Alert.alert("Error", "Failed to save note.");
+    }
   };
 
   const loadNote = async () => {
-    const savedNote =
-      await AsyncStorage.getItem("cartNote");
+    try {
+      const storedNote = await AsyncStorage.getItem("cartNote");
 
-    if (savedNote) {
-      setNote(savedNote);
+      if (storedNote) {
+        setNote(storedNote);
+        setSavedNote(storedNote);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text>Special Instructions</Text>
+      <Text style={styles.label}>Special Instructions</Text>
 
       <TextInput
-        style={[styles.input, { color: "white" }]}
+        style={styles.input}
+        placeholder="e.g. Extra sugar, no ice..."
+        placeholderTextColor="#888"
         value={note}
         onChangeText={setNote}
-        placeholder="Extra sugar..."
-        placeholderTextColor="#888"
       />
 
       <TouchableOpacity
         style={styles.button}
         onPress={saveNote}
       >
-        <Text style={styles.buttonText}>
-          Save Note
-        </Text>
+        <Text style={styles.buttonText}>Save Note</Text>
       </TouchableOpacity>
 
-      <Text>Last Saved Note:</Text>
-      <Text>{note}</Text>
+      <View style={styles.savedContainer}>
+        <Text style={styles.savedTitle}>
+          Last Saved Note:
+        </Text>
+
+        <Text style={styles.savedNote}>
+          {savedNote || "No note saved yet."}
+        </Text>
+      </View>
     </View>
   );
 }
@@ -63,33 +80,50 @@ const styles = StyleSheet.create({
     backgroundColor: "#000",
   },
 
+  label: {
+    color: "white",
+    marginBottom: 8,
+    fontSize: 16,
+  },
+
   input: {
     borderWidth: 1,
     borderColor: "#666",
     backgroundColor: "#222",
     color: "white",
-    padding: 10,
-    marginVertical: 10,
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 15,
   },
 
   button: {
-    backgroundColor: "#444",
-    padding: 12,
-    alignItems: "center",
-    borderRadius: 6,
-    marginVertical: 10,
+    backgroundColor: "green",
+    padding: 15,
+    borderRadius: 8,
+    marginBottom: 20,
   },
 
   buttonText: {
     color: "white",
-    fontWeight: "600",
+    textAlign: "center",
+    fontWeight: "bold",
+    fontSize: 16,
   },
 
-  label: {
-    color: "white",
+  savedContainer: {
+    backgroundColor: "#1b1b1b",
+    padding: 15,
+    borderRadius: 8,
   },
 
-  savedText: {
+  savedTitle: {
+    color: "#ccc",
+    marginBottom: 5,
+    fontWeight: "bold",
+  },
+
+  savedNote: {
     color: "white",
+    fontSize: 16,
   },
 });
