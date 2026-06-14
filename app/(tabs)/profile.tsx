@@ -1,0 +1,81 @@
+import React, { useEffect, useState } from "react";
+import {
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
+} from "react-native";
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+export default function ProfileScreen() {
+  const [name, setName] = useState("");
+
+  useEffect(() => {
+    loadName();
+  }, []);
+
+  const saveName = async () => {
+    await AsyncStorage.setItem(
+      "profileName",
+      name
+    );
+  };
+
+  const loadName = async () => {
+    const savedName =
+      await AsyncStorage.getItem("profileName");
+
+    if (savedName) {
+      setName(savedName);
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text>Profile Name</Text>
+
+      <TextInput
+        style={styles.input}
+        value={name}
+        onChangeText={setName}
+        placeholder="Enter name"
+      />
+
+      <TouchableOpacity
+        style={styles.button}
+        onPress={saveName}
+      >
+        <Text style={styles.buttonText}>
+          Save Name
+        </Text>
+      </TouchableOpacity>
+
+      <Text>Current Name:</Text>
+      <Text>{name}</Text>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 20,
+  },
+
+  input: {
+    borderWidth: 1,
+    padding: 10,
+    marginVertical: 10,
+  },
+
+  button: {
+    backgroundColor: "green",
+    padding: 15,
+  },
+
+  buttonText: {
+    color: "white",
+    textAlign: "center",
+  },
+});
