@@ -35,8 +35,7 @@ export default function ProfileScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.label}>Profile Name</Text>
-
-      <TextInput
+     <TextInput
      style={styles.input}
      value={name}
      onChangeText={setName}
