@@ -1,5 +1,6 @@
 import { router } from "expo-router";
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 type CoffeeItem = {
   id: string;
@@ -10,44 +11,82 @@ type CoffeeItem = {
 };
 
 export default function HomeScreen() {
-  const coffeeData: CoffeeItem[] = [
-    {
-      id: "1",
-      category: "Hot Drinks",
-      name: "Americano",
-      price: "₱120",
-      description: "Bold and strong black coffee brewed with espresso shots.",
-    },
-    {
-      id: "2",
-      category: "Hot Drinks",
-      name: "Cappuccino",
-      price: "₱150",
-      description: "Espresso with steamed milk and foam.",
-    },
-    {
-      id: "3",
-      category: "Hot Drinks",
-      name: "Latte",
-      price: "₱160",
-      description: "Creamy espresso drink with milk.",
-    },
-    {
-      id: "4",
-      category: "Cold Drinks",
-      name: "Iced Coffee",
-      price: "₱130",
-      description: "Refreshing chilled coffee.",
-    },
-    {
-      id: "5",
-      category: "Cold Drinks",
-      name: "Frappuccino",
-      price: "₱180",
-      description: "Blended iced coffee with whipped cream.",
-    },
-  ];
+  const [coffeeData, setCoffeeData] = useState<CoffeeItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
+useEffect(() => {
+  loadMenu();
+}, []);
+
+const loadMenu = async () => {
+  try {
+    setLoading(true);
+
+    await fetch("https://jsonplaceholder.typicode.com/posts/1");
+
+    setCoffeeData([
+      {
+        id: "1",
+        category: "Hot Drinks",
+        name: "Americano",
+        price: "₱120",
+        description:
+          "Bold and strong black coffee brewed with espresso shots.",
+      },
+      {
+        id: "2",
+        category: "Hot Drinks",
+        name: "Cappuccino",
+        price: "₱150",
+        description: "Espresso with steamed milk and foam.",
+      },
+      {
+        id: "3",
+        category: "Hot Drinks",
+        name: "Latte",
+        price: "₱160",
+        description: "Creamy espresso drink with milk.",
+      },
+      {
+        id: "4",
+        category: "Cold Drinks",
+        name: "Iced Coffee",
+        price: "₱130",
+        description: "Refreshing chilled coffee.",
+      },
+      {
+        id: "5",
+        category: "Cold Drinks",
+        name: "Frappuccino",
+        price: "₱180",
+        description:
+          "Blended iced coffee with whipped cream.",
+      },
+    ]);
+  } catch {
+    setError("No internet connection.");
+  } finally {
+    setLoading(false);
+  }
+};
+
+if (loading) {
+  return (
+    <View style={styles.container}>
+      <ActivityIndicator size="large" />
+      <Text>Loading Menu...</Text>
+    </View>
+  );
+}
+
+if (error) {
+  return (
+    <View style={styles.container}>
+      <Text>{error}</Text>
+    </View>
+  );
+}
   return (
     <View style={styles.container}>
       <Text style={styles.title}>☕ Coffee Shop Menu</Text>
