@@ -34,10 +34,11 @@ export default function CartScreen() {
       <Text>Special Instructions</Text>
 
       <TextInput
-        style={styles.input}
+        style={[styles.input, { color: "white" }]}
         value={note}
         onChangeText={setNote}
         placeholder="Extra sugar..."
+        placeholderTextColor="#888"
       />
 
       <TouchableOpacity
@@ -57,22 +58,38 @@ export default function CartScreen() {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     padding: 20,
+    backgroundColor: "#000",
   },
 
   input: {
     borderWidth: 1,
+    borderColor: "#666",
+    backgroundColor: "#222",
+    color: "white",
     padding: 10,
     marginVertical: 10,
   },
 
   button: {
-    backgroundColor: "green",
-    padding: 15,
+    backgroundColor: "#444",
+    padding: 12,
+    alignItems: "center",
+    borderRadius: 6,
+    marginVertical: 10,
   },
 
   buttonText: {
     color: "white",
-    textAlign: "center",
+    fontWeight: "600",
+  },
+
+  label: {
+    color: "white",
+  },
+
+  savedText: {
+    color: "white",
   },
 });
