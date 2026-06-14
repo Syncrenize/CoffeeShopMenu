@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import {
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -34,14 +34,15 @@ export default function ProfileScreen() {
 
   return (
     <View style={styles.container}>
-      <Text>Profile Name</Text>
+      <Text style={styles.label}>Profile Name</Text>
 
       <TextInput
-        style={styles.input}
-        value={name}
-        onChangeText={setName}
-        placeholder="Enter name"
-      />
+     style={styles.input}
+     value={name}
+     onChangeText={setName}
+     placeholder="Enter name"
+     placeholderTextColor="#888"
+/>
 
       <TouchableOpacity
         style={styles.button}
@@ -52,8 +53,8 @@ export default function ProfileScreen() {
         </Text>
       </TouchableOpacity>
 
-      <Text>Current Name:</Text>
-      <Text>{name}</Text>
+    <Text style={styles.label}>Current Name:</Text>
+<Text style={styles.savedText}>{name}</Text>
     </View>
   );
 }
@@ -61,6 +62,12 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
+  },
+
+  label: {
+    color: "white",
+    fontSize: 16,
+    marginBottom: 8,
   },
 
   input: {
@@ -77,5 +84,11 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "white",
     textAlign: "center",
+  },
+
+  savedText: {
+    color: "white",
+    fontSize: 18,
+    marginTop: 8,
   },
 });
