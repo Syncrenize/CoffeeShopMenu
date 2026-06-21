@@ -21,7 +21,6 @@ export default function OrdersScreen() {
     try {
       await AsyncStorage.setItem("cartNote", note);
       setSavedNote(note);
-
       Alert.alert("Success", "Note saved successfully!");
     } catch (error) {
       Alert.alert("Error", "Failed to save note.");
@@ -31,18 +30,18 @@ export default function OrdersScreen() {
   const loadNote = async () => {
     try {
       const storedNote = await AsyncStorage.getItem("cartNote");
-
-      if (storedNote) {
+      if (storedNote !== null) {
         setNote(storedNote);
         setSavedNote(storedNote);
       }
     } catch (error) {
-      console.log(error);
+      console.log("Failed to load note:", error);
     }
   };
 
   return (
     <View style={styles.container}>
+      <Text style={styles.title}>🛒 Orders</Text>
       <Text style={styles.label}>Special Instructions</Text>
 
       <TextInput
@@ -53,18 +52,12 @@ export default function OrdersScreen() {
         onChangeText={setNote}
       />
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={saveNote}
-      >
+      <TouchableOpacity style={styles.button} onPress={saveNote}>
         <Text style={styles.buttonText}>Save Note</Text>
       </TouchableOpacity>
 
       <View style={styles.savedContainer}>
-        <Text style={styles.savedTitle}>
-          Last Saved Note:
-        </Text>
-
+        <Text style={styles.savedTitle}>Last Saved Note:</Text>
         <Text style={styles.savedNote}>
           {savedNote || "No note saved yet."}
         </Text>
@@ -77,7 +70,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: "#000",
+    backgroundColor: "#1E1A1A",
+  },
+
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#fff",
+    marginBottom: 20,
   },
 
   label: {
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: 1,
     borderColor: "#666",
-    backgroundColor: "#222",
+    backgroundColor: "#2A2525",
     color: "white",
     padding: 12,
     borderRadius: 8,
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    backgroundColor: "green",
+    backgroundColor: "#8B4513",
     padding: 15,
     borderRadius: 8,
     marginBottom: 20,
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
   },
 
   savedContainer: {
-    backgroundColor: "#1b1b1b",
+    backgroundColor: "#2A2525",
     padding: 15,
     borderRadius: 8,
   },
