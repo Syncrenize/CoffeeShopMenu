@@ -1,13 +1,13 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import {
+  Alert,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
-
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function ProfileScreen() {
   const [name, setName] = useState("");
@@ -17,50 +17,52 @@ export default function ProfileScreen() {
   }, []);
 
   const saveName = async () => {
-    await AsyncStorage.setItem(
-      "profileName",
-      name
-    );
+    try {
+      await AsyncStorage.setItem("profileName", name);
+      Alert.alert("Success", "Name saved successfully!");
+    } catch (error) {
+      Alert.alert("Error", "Failed to save name.");
+    }
   };
 
   const loadName = async () => {
-    const savedName =
-      await AsyncStorage.getItem("profileName");
-
-    if (savedName) {
-      setName(savedName);
+    try {
+      const savedName = await AsyncStorage.getItem("profileName");
+      if (savedName) {
+        setName(savedName);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.label}>Profile Name</Text>
-     <TextInput
-     style={styles.input}
-     value={name}
-     onChangeText={setName}
-     placeholder="Enter name"
-     placeholderTextColor="#888"
-/>
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={saveName}
-      >
-        <Text style={styles.buttonText}>
-          Save Name
-        </Text>
+      <TextInput
+        style={styles.input}
+        value={name}
+        onChangeText={setName}
+        placeholder="Enter name"
+        placeholderTextColor="#888"
+      />
+
+      <TouchableOpacity style={styles.button} onPress={saveName}>
+        <Text style={styles.buttonText}>Save Name</Text>
       </TouchableOpacity>
 
-    <Text style={styles.label}>Current Name:</Text>
-<Text style={styles.savedText}>{name}</Text>
+      <Text style={styles.label}>Current Name:</Text>
+      <Text style={styles.savedText}>{name || "No name saved yet."}</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     padding: 20,
+    backgroundColor: "#000",
   },
 
   label: {
@@ -71,18 +73,27 @@ const styles = StyleSheet.create({
 
   input: {
     borderWidth: 1,
-    padding: 10,
-    marginVertical: 10,
+    borderColor: "#666",
+    backgroundColor: "#111",
+    color: "white", // THIS makes typed text visible
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 15,
+    fontSize: 16,
   },
 
   button: {
     backgroundColor: "green",
     padding: 15,
+    borderRadius: 8,
+    marginBottom: 20,
   },
 
   buttonText: {
     color: "white",
     textAlign: "center",
+    fontWeight: "bold",
+    fontSize: 16,
   },
 
   savedText: {
